@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85201666eabb8c145ba61e0660180922, type: 3}
-  m_Name: EasyGameSettings
+  m_Name: HardGameSettings
   m_EditorClassIdentifier: 
-  DifficultyType: 0
-  BoardSize: {x: 328, y: 412}
-  GameWindowSize: {x: 328, y: 496}
-  CellsColumns: 9
-  CellsRows: 9
-  BombsCount: 10
-  BombsRandomnicity: 100
-  BombsRandomnDelta: 6
+  DifficultyType: 2
+  BoardSize: {x: 776, y: 860}
+  GameWindowSize: {x: 776, y: 945}
+  CellsColumns: 23
+  CellsRows: 23
+  BombsCount: 99
+  BombsRandomnicity: 200
+  BombsRandomnDelta: 5

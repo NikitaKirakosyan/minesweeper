@@ -5,6 +5,7 @@ namespace NikitaKirakosyan.Minesweeper
     [CreateAssetMenu(menuName = "Configurations/GameSettingsData", fileName = nameof(GameSettingsData))]
     public class GameSettingsData : ScriptableObject
     {
+        public DifficultyType DifficultyType;
         public Vector2 GameWindowSize = new (328, 412);
         public int CellsColumns = 9;
         public int CellsRows = 9;
