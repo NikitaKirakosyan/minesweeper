@@ -249,7 +249,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CellExploded
+      name: CellBombMistak
       rect:
         serializedVersion: 2
         x: 102
@@ -477,9 +477,9 @@ TextureImporter:
       Cell6: -1363643836
       Cell7: 2132044031
       Cell8: 589885998
+      CellBombMistak: -515870347
       CellBombMistake: -1177102450
       CellBombNormal: 1616907983
-      CellExploded: -515870347
       CellFlag: -1264504200
       CellNormal: -876170010
       CellOpened: 1103923212
