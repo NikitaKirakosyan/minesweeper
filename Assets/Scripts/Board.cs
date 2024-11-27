@@ -8,17 +8,48 @@ namespace NikitaKirakosyan.Minesweeper
         [SerializeField] private RectTransform _rectTransform;
         [SerializeField] private RectTransform _gameFieldGrid;
         [SerializeField] private Cell _cellPrefab;
+        [SerializeField] private BoardHeader _boardHeader;
 
         private List<Cell> _cellInstances;
 
 
-        public void SetSize(Vector2 newSize)
+        private void Awake()
+        {
+            Game.Instance.OnGameStarted += Setup;
+            Game.Instance.OnGameSettingsChanged += Setup;
+        }
+
+        private void OnDestroy()
+        {
+            Game.Instance.OnGameStarted -= Setup;
+            Game.Instance.OnGameSettingsChanged -= Setup;
+        }
+        
+
+        public void Setup(GameSettingsData gameSettings)
+        {
+            SetSize(gameSettings.GameWindowSize);
+            FillGameField(gameSettings);
+            _boardHeader.SetBombsCounter(gameSettings.BombsCount);
+            _boardHeader.LaunchTimer();
+        }
+        
+        
+        private void SetSize(Vector2 newSize)
         {
             _rectTransform.sizeDelta = newSize;
         }
-
-        public void FillGameField(int[,] cellsMatrix)
+        
+        private void FillGameField(GameSettingsData gameSettings)
         {
+            var cellsMatrix = CellsGenerator.Generate(
+                gameSettings.CellsColumns,
+                gameSettings.CellsRows,
+                gameSettings.BombsCount,
+                (1, 1),
+                gameSettings.BombsRandomnicity,
+                gameSettings.BombsRandomnDelta);
+            
             _cellInstances ??= new List<Cell>(cellsMatrix.Length);
             var cellIndex = 0;
             

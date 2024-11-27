@@ -1,11 +1,14 @@
+using System;
 using UnityEngine;
 
 namespace NikitaKirakosyan.Minesweeper
 {
     public sealed class Game : MonoBehaviour
     {
+        public event Action<GameSettingsData> OnGameStarted; 
+        public event Action<GameSettingsData> OnGameSettingsChanged; 
+        
         [SerializeField] private GameSettingsData[] _gameSettings;
-        [SerializeField] private Board _board;
 
         private int _currentGameSettingsIndex = 0;
 
@@ -28,15 +31,7 @@ namespace NikitaKirakosyan.Minesweeper
         
         public void StartGame()
         {
-            var cellsMatrix = CellsGenerator.Generate(
-                CurrentGameSettings.CellsColumns,
-                CurrentGameSettings.CellsRows,
-                CurrentGameSettings.BombsCount,
-                (1, 1),
-                CurrentGameSettings.BombsRandomnicity,
-                CurrentGameSettings.BombsRandomnDelta);
-            
-            _board.FillGameField(cellsMatrix);
+            OnGameStarted?.Invoke(CurrentGameSettings);
         }
 
         public void ChangeGameSettings()
@@ -45,7 +40,7 @@ namespace NikitaKirakosyan.Minesweeper
             if(_currentGameSettingsIndex >= _gameSettings.Length)
                 _currentGameSettingsIndex = 0;
 
-            _board.SetSize(CurrentGameSettings.GameWindowSize);
+            OnGameSettingsChanged?.Invoke(CurrentGameSettings);
         }
     }
 }
