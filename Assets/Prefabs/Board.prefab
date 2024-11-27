@@ -358,6 +358,7 @@ MonoBehaviour:
   _rectTransform: {fileID: 7424704969466885324}
   _gameFieldGrid: {fileID: 7275908554523545278}
   _cellPrefab: {fileID: -5145114152007355869, guid: 4d7641af89c4eee4f90515ea64fc30da, type: 3}
+  _boardHeader: {fileID: 6694802154581121092}
 --- !u!1 &2242988156948356323
 GameObject:
   m_ObjectHideFlags: 0
@@ -1139,3 +1140,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1702533093707281726, guid: f764c835c41e9d4499f98c6ecb4f7100, type: 3}
   m_PrefabInstance: {fileID: 6603417694365082353}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6694802154581121092 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 526000310338665141, guid: f764c835c41e9d4499f98c6ecb4f7100, type: 3}
+  m_PrefabInstance: {fileID: 6603417694365082353}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20027d40a0e691f4783915cec1c088c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
