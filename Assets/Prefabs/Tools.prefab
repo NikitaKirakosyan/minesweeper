@@ -246,6 +246,7 @@ GameObject:
   - component: {fileID: 3503372342616787767}
   - component: {fileID: 6261677478312145205}
   - component: {fileID: 7192949446110089623}
+  - component: {fileID: 7800152235168616473}
   m_Layer: 5
   m_Name: FlipButton
   m_TagString: Untagged
@@ -354,6 +355,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7800152235168616473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1971967533241685535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6763050a076f414bb0ee5ebaf9ed8a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _flipButtonNormal: {fileID: 21300000, guid: aa372a05d42b7944fbc1a60ee9c72aa6, type: 3}
+  _flipButtonPressed: {fileID: 21300000, guid: 05cffb227f6c6054f9b62f8ce9100f06, type: 3}
+  _inversedFlipButtonNormal: {fileID: 21300000, guid: 8e975923d0f20404e91d0cf8efabf255, type: 3}
+  _inversedFlipButtonPressed: {fileID: 21300000, guid: 873bc92cf6088d743a46fc1b6f5207e4, type: 3}
+  _image: {fileID: 6261677478312145205}
+  _button: {fileID: 7192949446110089623}
 --- !u!1 &2457987468816471575
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,9 +540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _zoomInButton: {fileID: 9194478574051761516}
   _zoomOutButton: {fileID: 5702006465880009263}
-  _changeDifficultButton: {fileID: 1177255508957883078}
   _changeGenerationButton: {fileID: 2982038568466534775}
-  _flipButton: {fileID: 7192949446110089623}
   _hintButton: {fileID: 6353800023558596653}
 --- !u!1 &3292405818422712812
 GameObject:

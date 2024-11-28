@@ -18,6 +18,8 @@ namespace NikitaKirakosyan.Minesweeper
         public static Game Instance { get; private set; }
 
         public GameSettingsData CurrentGameSettings => _gameSettings[_currentGameSettingsIndex];
+        public bool IsGameStarted { get; private set; }
+        public bool IsOpenAndFlagInversed { get; private set; }
 
 
         private void Awake()
@@ -40,6 +42,7 @@ namespace NikitaKirakosyan.Minesweeper
 
         public void StartGame()
         {
+            IsGameStarted = true;
             OnGameStarted?.Invoke(CurrentGameSettings);
             _gameWindow.sizeDelta = CurrentGameSettings.GameWindowSize;
         }
@@ -54,8 +57,16 @@ namespace NikitaKirakosyan.Minesweeper
             StartGame();
         }
 
+        public void InverseOpenAndFlag()
+        {
+            IsOpenAndFlagInversed = !IsOpenAndFlagInversed;
+        }
+        
         public void ShowHint()
         {
+            if(!IsGameStarted)
+                return;
+            
             for(var x = 0; x < _board.CellsMatrix.GetLength(0); x++)
             for(var y = 0; y < _board.CellsMatrix.GetLength(1); y++)
             {

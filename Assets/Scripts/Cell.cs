@@ -32,10 +32,20 @@ namespace NikitaKirakosyan.Minesweeper
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if(eventData.button == PointerEventData.InputButton.Left)
-                Open(false);
-            else if(eventData.button == PointerEventData.InputButton.Right)
-                SetFlag(!HasFlag);
+            if(Game.Instance.IsOpenAndFlagInversed)
+            {
+                if(eventData.button == PointerEventData.InputButton.Right)
+                    Open(false);
+                else if(eventData.button == PointerEventData.InputButton.Left)
+                    SetFlag(!HasFlag);
+            }
+            else
+            {
+                if(eventData.button == PointerEventData.InputButton.Left)
+                    Open(false);
+                else if(eventData.button == PointerEventData.InputButton.Right)
+                    SetFlag(!HasFlag);
+            }
         }
 
         public void Init(Vector2Int matrixPosition, bool hasBomb)
