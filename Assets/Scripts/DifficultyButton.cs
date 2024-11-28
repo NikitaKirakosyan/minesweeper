@@ -14,14 +14,19 @@ namespace NikitaKirakosyan.Minesweeper
         private Dictionary<DifficultyType, (Sprite normalSprite, Sprite pressedSprite)> _cachedSpritesByDifficulty;
 
 
-        private void Start()
+        private void OnEnable()
         {
-            Game.Instance.OnGameSettingsChanged += Refresh;
+            Game.OnGameSettingsChanged += Refresh;
             Refresh(Game.Instance.CurrentGameSettings);
             _button.onClick.AddListener(Game.Instance.ChangeGameSettings);
         }
 
-        
+        private void OnDisable()
+        {
+            Game.OnGameSettingsChanged -= Refresh;
+        }
+
+
         private void Refresh(GameSettingsData gameSettings)
         {
             var sprites = GetSpriteByDifficulty(gameSettings.DifficultyType);

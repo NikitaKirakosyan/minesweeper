@@ -13,37 +13,29 @@ namespace NikitaKirakosyan.Minesweeper
         /// <param name="bombsCount"></param>
         /// <param name="pressedCellIndex"></param>
         /// <returns></returns>
-        public static int[,] Generate(int cellsColumns, int cellsRows, int bombsCount, (int xPos, int yPos) pressedCellIndex, int bombsRandomnicity = 100, int bombsRandomnDelta = 3)
+        public static int[,] Generate(int cellsColumns, int cellsRows, int bombsCount, int bombsRandomnicity = 100, int bombsRandomnDelta = 3)
         {
             var random = new Random();
             var cellsMatrix = new int[cellsColumns, cellsRows];
             var bombsGeneratedCount = 0;
             var iterationsLeft = cellsMatrix.Length;
-            
+
             for(var x = 0; x < cellsMatrix.GetLength(0); x++)
             {
                 for(var y = 0; y < cellsMatrix.GetLength(1); y++)
                 {
-                    if(x == pressedCellIndex.xPos && y == pressedCellIndex.yPos)
-                    {
-                        cellsMatrix[x, y] = 0;
-                    }
-                    else
-                    {
-                        var hasBomb = false;
-                        
-                        var requiredBombs = bombsCount - bombsGeneratedCount;
-                        if(requiredBombs >= iterationsLeft)
-                            hasBomb = true;
-                        else if(bombsGeneratedCount < bombsCount)
-                            hasBomb = random.Next(0, bombsRandomnicity) < bombsRandomnicity / bombsRandomnDelta;
+                    var hasBomb = false;
 
-                        if(hasBomb)
-                            bombsGeneratedCount++;
-                        
-                        cellsMatrix[x, y] = hasBomb ? 1 : 0;
-                    }
+                    var requiredBombs = bombsCount - bombsGeneratedCount;
+                    if(requiredBombs >= iterationsLeft)
+                        hasBomb = true;
+                    else if(bombsGeneratedCount < bombsCount)
+                        hasBomb = random.Next(0, bombsRandomnicity) < bombsRandomnicity / bombsRandomnDelta;
 
+                    if(hasBomb)
+                        bombsGeneratedCount++;
+
+                    cellsMatrix[x, y] = hasBomb ? 1 : 0;
                     iterationsLeft--;
                 }
             }

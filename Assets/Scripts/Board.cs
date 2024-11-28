@@ -17,16 +17,16 @@ namespace NikitaKirakosyan.Minesweeper
         public int[,] CellsMatrix { get; private set; }
 
 
-        private void Start()
+        private void OnEnable()
         {
-            Game.Instance.OnGameStarted += Setup;
-            Game.Instance.OnGameSettingsChanged += Setup;
+            Game.OnGameStarted += Setup;
+            Game.OnGameSettingsChanged += Setup;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
-            Game.Instance.OnGameStarted -= Setup;
-            Game.Instance.OnGameSettingsChanged -= Setup;
+            Game.OnGameStarted -= Setup;
+            Game.OnGameSettingsChanged -= Setup;
         }
 
 
@@ -61,7 +61,6 @@ namespace NikitaKirakosyan.Minesweeper
                 gameSettings.CellsColumns,
                 gameSettings.CellsRows,
                 gameSettings.BombsCount,
-                (0, 0),
                 gameSettings.BombsRandomnicity,
                 gameSettings.BombsRandomnDelta);
 

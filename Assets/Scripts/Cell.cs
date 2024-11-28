@@ -32,7 +32,7 @@ namespace NikitaKirakosyan.Minesweeper
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if(Game.Instance.IsOpenAndFlagInversed)
+            if(Game.IsOpenAndFlagInversed)
             {
                 if(eventData.button == PointerEventData.InputButton.Right)
                     Open(false);

@@ -7,7 +7,6 @@ namespace NikitaKirakosyan.Minesweeper
     {
         [SerializeField] private Button _zoomInButton;
         [SerializeField] private Button _zoomOutButton;
-        [SerializeField] private Button _changeGenerationButton;
         [SerializeField] private Button _hintButton;
 
 
@@ -15,7 +14,6 @@ namespace NikitaKirakosyan.Minesweeper
         {
             _zoomInButton.onClick.AddListener(OnZoomInButtonClick);
             _zoomOutButton.onClick.AddListener(OnZoomOutButtonClick);
-            _changeGenerationButton.onClick.AddListener(OnChangeGenerationButtonClick);
             _hintButton.onClick.AddListener(OnHintButtonClick);
         }
 
@@ -28,11 +26,6 @@ namespace NikitaKirakosyan.Minesweeper
         private void OnZoomOutButtonClick()
         {
             ZoomController.Zoom(ZoomType.Out);
-        }
-        
-        private void OnChangeGenerationButtonClick()
-        {
-            
         }
         
         private void OnHintButtonClick()

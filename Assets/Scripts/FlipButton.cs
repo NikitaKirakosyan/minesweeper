@@ -18,20 +18,20 @@ namespace NikitaKirakosyan.Minesweeper
         private void Start()
         {
             Refresh();
-            _button.onClick.AddListener(Game.Instance.InverseOpenAndFlag);
+            _button.onClick.AddListener(Game.InverseOpenAndFlag);
             _button.onClick.AddListener(Refresh);
         }
 
         
         private void Refresh()
         {
-            _image.sprite = Game.Instance.IsOpenAndFlagInversed ? _inversedFlipButtonNormal : _flipButtonNormal;
+            _image.sprite = Game.IsOpenAndFlagInversed ? _inversedFlipButtonNormal : _flipButtonNormal;
             
             var buttonSpriteState = _button.spriteState;
-            buttonSpriteState.highlightedSprite = Game.Instance.IsOpenAndFlagInversed ? _inversedFlipButtonNormal : _flipButtonNormal;
-            buttonSpriteState.pressedSprite = Game.Instance.IsOpenAndFlagInversed ? _inversedFlipButtonPressed : _flipButtonPressed;
-            buttonSpriteState.selectedSprite = Game.Instance.IsOpenAndFlagInversed ? _inversedFlipButtonNormal : _flipButtonNormal;
-            buttonSpriteState.disabledSprite = Game.Instance.IsOpenAndFlagInversed ? _inversedFlipButtonNormal : _flipButtonNormal;
+            buttonSpriteState.highlightedSprite = Game.IsOpenAndFlagInversed ? _inversedFlipButtonNormal : _flipButtonNormal;
+            buttonSpriteState.pressedSprite = Game.IsOpenAndFlagInversed ? _inversedFlipButtonPressed : _flipButtonPressed;
+            buttonSpriteState.selectedSprite = Game.IsOpenAndFlagInversed ? _inversedFlipButtonNormal : _flipButtonNormal;
+            buttonSpriteState.disabledSprite = Game.IsOpenAndFlagInversed ? _inversedFlipButtonNormal : _flipButtonNormal;
             _button.spriteState = buttonSpriteState;
         }
     }

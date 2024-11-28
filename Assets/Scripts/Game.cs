@@ -5,8 +5,10 @@ namespace NikitaKirakosyan.Minesweeper
 {
     public sealed class Game : MonoBehaviour
     {
-        public event Action<GameSettingsData> OnGameStarted;
-        public event Action<GameSettingsData> OnGameSettingsChanged;
+        private static Game _instance;
+        
+        public static event Action<GameSettingsData> OnGameStarted;
+        public static event Action<GameSettingsData> OnGameSettingsChanged;
 
         [SerializeField] private RectTransform _gameWindow;
         [SerializeField] private RectTransform _gameUIRoot;
@@ -15,27 +17,22 @@ namespace NikitaKirakosyan.Minesweeper
 
         private int _currentGameSettingsIndex;
 
-        public static Game Instance { get; private set; }
-
+        public static Game Instance => _instance ??= FindObjectOfType<Game>();
         public GameSettingsData CurrentGameSettings => _gameSettings[_currentGameSettingsIndex];
         public bool IsGameStarted { get; private set; }
-        public bool IsOpenAndFlagInversed { get; private set; }
+        public static bool IsOpenAndFlagInversed { get; private set; }
 
-
-        private void Awake()
+        
+        private void Start()
         {
-            if(Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
             ZoomController.OnZoomChanged += OnZoomChanged;
+            StartGame();
         }
 
         private void OnDestroy()
         {
+            OnGameStarted = null;
+            OnGameSettingsChanged = null;
             ZoomController.OnZoomChanged -= OnZoomChanged;
         }
 
@@ -57,7 +54,7 @@ namespace NikitaKirakosyan.Minesweeper
             StartGame();
         }
 
-        public void InverseOpenAndFlag()
+        public static void InverseOpenAndFlag()
         {
             IsOpenAndFlagInversed = !IsOpenAndFlagInversed;
         }
