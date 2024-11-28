@@ -15,7 +15,6 @@ namespace NikitaKirakosyan.Minesweeper
 
         private List<Cell> ActiveCells => !_cellInstances.IsNullOrEmpty() ? _cellInstances.Where(cell => cell.IsActive).ToList() : null;
         public int[,] CellsMatrix { get; private set; }
-        public List<Cell> OpenedCells => !ActiveCells.IsNullOrEmpty() ? ActiveCells.Where(cell => cell.IsOpened).ToList() : null;
 
 
         private void Start()
@@ -62,7 +61,7 @@ namespace NikitaKirakosyan.Minesweeper
                 gameSettings.CellsColumns,
                 gameSettings.CellsRows,
                 gameSettings.BombsCount,
-                (1, 1),
+                (0, 0),
                 gameSettings.BombsRandomnicity,
                 gameSettings.BombsRandomnDelta);
 

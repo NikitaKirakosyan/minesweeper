@@ -49,24 +49,23 @@ namespace NikitaKirakosyan.Minesweeper
 
         public void SetFlag(bool value)
         {
-            Debug.LogError(IsOpened, gameObject);
             if(IsOpened)
                 return;
-
+            
             HasFlag = value;
             _image.sprite = HasFlag ? _flagSprite : _defaultSprite;
         }
 
         public void Open(bool isAutoOpen)
         {
-            if(!_isInitialized || IsOpened)
+            if(!_isInitialized || IsOpened || HasFlag)
                 return;
 
             if(isAutoOpen)
                 _image.sprite = HasBomb ? _bombSprite : _openedSprite;
             else
                 _image.sprite = HasBomb ? _bombMistakeSprite : _openedSprite;
-
+            
             OnOpened?.Invoke();
         }
 

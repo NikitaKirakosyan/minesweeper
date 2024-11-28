@@ -56,42 +56,49 @@ namespace NikitaKirakosyan.Minesweeper
 
         public void ShowHint()
         {
-            if(_board.OpenedCells.IsNullOrEmpty())
-                return;
-
-            foreach(var boardOpenedCell in _board.OpenedCells)
+            for(var x = 0; x < _board.CellsMatrix.GetLength(0); x++)
+            for(var y = 0; y < _board.CellsMatrix.GetLength(1); y++)
             {
-                var x = boardOpenedCell.MatrixPosition.x;
-                var y = boardOpenedCell.MatrixPosition.x;
+                var cellInMatrix = _board.GetCell(new Vector2Int(x, y));
+                if(!cellInMatrix.IsOpened || cellInMatrix.HasFlag)
+                    continue;
+
                 var xPositiveOffset = x + 1;
                 var xNegativeOffset = x - 1;
                 var yPositiveOffset = y + 1;
                 var yNegativeOffset = y - 1;
-
-                var cell = _board.GetCell(new Vector2Int(xPositiveOffset, y));
-                if(cell == null)
-                    cell = _board.GetCell(new Vector2Int(xNegativeOffset, y));
-                if(cell == null)
-                    cell = _board.GetCell(new Vector2Int(xPositiveOffset, yPositiveOffset));
-                if(cell == null)
-                    cell = _board.GetCell(new Vector2Int(xPositiveOffset, yNegativeOffset));
-                if(cell == null)
-                    cell = _board.GetCell(new Vector2Int(xNegativeOffset, yPositiveOffset));
-                if(cell == null)
-                    cell = _board.GetCell(new Vector2Int(xNegativeOffset, yNegativeOffset));
-                if(cell == null)
-                    cell = _board.GetCell(new Vector2Int(x, yPositiveOffset));
-                if(cell == null)
-                    cell = _board.GetCell(new Vector2Int(x, yNegativeOffset));
-                
-                if(cell != null && !cell.IsOpened && !cell.HasFlag && cell.HasBomb)
+                var possiblePositions = new Vector2Int[]
                 {
-                    cell.SetFlag(true);
-                    return;
+                    new (xPositiveOffset, yPositiveOffset),
+                    new (xPositiveOffset, yNegativeOffset),
+                    new (xNegativeOffset, yPositiveOffset),
+                    new (xNegativeOffset, yNegativeOffset),
+                    new (x, yPositiveOffset),
+                    new (x, yNegativeOffset),
+                    new (xPositiveOffset, y),
+                    new (xNegativeOffset, y)
+                };
+                
+                foreach(var possiblePosition in possiblePositions)
+                {
+                    var cellToHint = _board.GetCell(possiblePosition);
+                    if(TryShowHint(cellToHint))
+                        return;
                 }
             }
         }
 
+
+        private bool TryShowHint(Cell cellToHint)
+        {
+            if(cellToHint != null && !cellToHint.IsOpened && !cellToHint.HasFlag && cellToHint.HasBomb)
+            {
+                cellToHint.SetFlag(true);
+                return true;
+            }
+
+            return false;
+        }
 
         private void OnZoomChanged(float zoom)
         {

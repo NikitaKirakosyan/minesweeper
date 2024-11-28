@@ -18,5 +18,5 @@ MonoBehaviour:
   CellsColumns: 9
   CellsRows: 9
   BombsCount: 10
-  BombsRandomnicity: 100
-  BombsRandomnDelta: 6
+  BombsRandomnicity: 2
+  BombsRandomnDelta: 2
