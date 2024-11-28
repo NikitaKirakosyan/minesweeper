@@ -10,6 +10,8 @@ namespace NikitaKirakosyan.Minesweeper
         
         public void Launch()
         {
+            if(_passedSeconds > 0)
+                return;
             StartCoroutine(SlowUpdate());
         }
 
@@ -25,8 +27,8 @@ namespace NikitaKirakosyan.Minesweeper
             while(true)
             {
                 SetValue(_passedSeconds);
-                yield return new WaitForSeconds(1);
                 _passedSeconds++;
+                yield return new WaitForSeconds(1);
             }
         }
     }

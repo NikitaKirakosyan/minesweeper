@@ -23,7 +23,6 @@ namespace NikitaKirakosyan.Minesweeper
 
         public void LaunchTimer()
         {
-            StopTimer();
             _timerCounter.Launch();
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace NikitaKirakosyan.Minesweeper
@@ -12,8 +13,12 @@ namespace NikitaKirakosyan.Minesweeper
 
         private List<Cell> _cellInstances;
 
+        private List<Cell> ActiveCells => !_cellInstances.IsNullOrEmpty() ? _cellInstances.Where(cell => cell.IsActive).ToList() : null;
+        public int[,] CellsMatrix { get; private set; }
+        public List<Cell> OpenedCells => !ActiveCells.IsNullOrEmpty() ? ActiveCells.Where(cell => cell.IsOpened).ToList() : null;
 
-        private void Awake()
+
+        private void Start()
         {
             Game.Instance.OnGameStarted += Setup;
             Game.Instance.OnGameSettingsChanged += Setup;
@@ -24,55 +29,72 @@ namespace NikitaKirakosyan.Minesweeper
             Game.Instance.OnGameStarted -= Setup;
             Game.Instance.OnGameSettingsChanged -= Setup;
         }
-        
+
 
         public void Setup(GameSettingsData gameSettings)
         {
-            SetSize(gameSettings.GameWindowSize);
+            SetSize(gameSettings.BoardSize);
             FillGameField(gameSettings);
             _boardHeader.SetBombsCounter(gameSettings.BombsCount);
-            _boardHeader.LaunchTimer();
         }
-        
-        
+
+        public Cell GetCell(Vector2Int matrixPosition)
+        {
+            if(!ActiveCells.IsNullOrEmpty())
+            {
+                var foundCell = ActiveCells.Find(cell => cell.MatrixPosition == matrixPosition);
+                if(foundCell != null)
+                    return foundCell;
+            }
+
+            return null;
+        }
+
+
         private void SetSize(Vector2 newSize)
         {
             _rectTransform.sizeDelta = newSize;
         }
-        
+
         private void FillGameField(GameSettingsData gameSettings)
         {
-            var cellsMatrix = CellsGenerator.Generate(
+            CellsMatrix = CellsGenerator.Generate(
                 gameSettings.CellsColumns,
                 gameSettings.CellsRows,
                 gameSettings.BombsCount,
                 (1, 1),
                 gameSettings.BombsRandomnicity,
                 gameSettings.BombsRandomnDelta);
-            
-            _cellInstances ??= new List<Cell>(cellsMatrix.Length);
+
+            _cellInstances ??= new List<Cell>(CellsMatrix.Length);
+
             var cellIndex = 0;
-            
-            for(var x = 0; x < cellsMatrix.GetLength(0); x++)
+            for(var x = 0; x < CellsMatrix.GetLength(0); x++)
             {
-                for(var y = 0; y < cellsMatrix.GetLength(1); y++)
+                for(var y = 0; y < CellsMatrix.GetLength(1); y++)
                 {
-                    var hasBomb = cellsMatrix[x, y] == 1;
-                    
+                    var hasBomb = CellsMatrix[x, y] == 1;
+                    Cell cell;
+
                     if(cellIndex < _cellInstances.Count)
                     {
-                        _cellInstances[cellIndex].Init(hasBomb);
+                        cell = _cellInstances[cellIndex];
                     }
                     else
                     {
-                        var newCell = Instantiate(_cellPrefab, _gameFieldGrid);
-                        newCell.Init(hasBomb);
-                        _cellInstances.Add(newCell);
+                        cell = Instantiate(_cellPrefab, _gameFieldGrid);
+                        cell.OnOpened += () => _boardHeader.LaunchTimer();
+                        _cellInstances.Add(cell);
                     }
 
+                    cell.Init(new Vector2Int(x, y), hasBomb);
                     cellIndex++;
                 }
             }
+
+            var cellsDelta = _cellInstances.Count - 1 - Mathf.Abs(cellIndex - _cellInstances.Count);
+            for(var i = _cellInstances.Count - 1; i > cellsDelta; i--)
+                _cellInstances[i].SetActive(false);
         }
     }
 }

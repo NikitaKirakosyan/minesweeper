@@ -6,6 +6,7 @@ namespace NikitaKirakosyan.Minesweeper
     public class GameSettingsData : ScriptableObject
     {
         public DifficultyType DifficultyType;
+        public Vector2 BoardSize = new (328, 412);
         public Vector2 GameWindowSize = new (328, 412);
         public int CellsColumns = 9;
         public int CellsRows = 9;
