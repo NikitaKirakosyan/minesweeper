@@ -11,7 +11,7 @@ namespace NikitaKirakosyan.Minesweeper
 
         private int _maxValue;
 
-        private int MaxValue
+        protected int MaxValue
         {
             get
             {

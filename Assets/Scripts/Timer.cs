@@ -17,8 +17,9 @@ namespace NikitaKirakosyan.Minesweeper
 
         public void Stop()
         {
-            _passedSeconds = 0;
             StopAllCoroutines();
+            _passedSeconds = 0;
+            SetValue(_passedSeconds);
         }
 
 
@@ -26,7 +27,9 @@ namespace NikitaKirakosyan.Minesweeper
         {
             while(true)
             {
-                SetValue(_passedSeconds);
+                if(_passedSeconds < MaxValue)
+                    SetValue(_passedSeconds);
+
                 _passedSeconds++;
                 yield return new WaitForSeconds(1);
             }
