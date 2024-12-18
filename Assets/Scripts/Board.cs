@@ -111,7 +111,15 @@ namespace NikitaKirakosyan.Minesweeper
                 if(x + 1 < CellsMatrix.GetLength(0)) 
                     bombsAround += CellsMatrix[x + 1, y + 1] == 1 ? 1 : 0;
             }
-            else if(x > 0 && y > 0)
+            
+            if(y > 0 && x == 0)
+            {
+                bombsAround += CellsMatrix[x + 1, y - 1] == 1 ? 1 : 0;
+                if(y + 1 < CellsMatrix.GetLength(1)) 
+                    bombsAround += CellsMatrix[x + 1, y + 1] == 1 ? 1 : 0;
+            }
+            
+            if(x > 0 && y > 0)
             {
                 bombsAround += CellsMatrix[x - 1, y - 1] == 1 ? 1 : 0;
                 if(y + 1 < CellsMatrix.GetLength(1)) 
@@ -124,13 +132,15 @@ namespace NikitaKirakosyan.Minesweeper
                         bombsAround += CellsMatrix[x + 1, y + 1] == 1 ? 1 : 0;
                 }
             }
-            else if(x > 0 && y == CellsMatrix.GetLength(1) - 1)
+            
+            if(x > 0 && y == CellsMatrix.GetLength(1) - 1)
             {
                 bombsAround += CellsMatrix[x - 1, y - 1] == 1 ? 1 : 0;
                 if(x + 1 < CellsMatrix.GetLength(0)) 
                     bombsAround += CellsMatrix[x + 1, y - 1] == 1 ? 1 : 0;
             }
-            else if(x == CellsMatrix.GetLength(0) - 1 && y > 0)
+            
+            if(x == CellsMatrix.GetLength(0) - 1 && y > 0)
             {
                 bombsAround += CellsMatrix[x - 1, y - 1] == 1 ? 1 : 0;
                 if(y + 1 < CellsMatrix.GetLength(1)) 
