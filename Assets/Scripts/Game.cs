@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NikitaKirakosyan.Minesweeper
 {
@@ -10,6 +11,7 @@ namespace NikitaKirakosyan.Minesweeper
         public static event Action<GameSettingsData> OnGameStarted;
         public static event Action<GameSettingsData> OnGameSettingsChanged;
 
+        [SerializeField] private CanvasScaler _canvasScaler;
         [SerializeField] private RectTransform _gameWindow;
         [SerializeField] private RectTransform _gameUIRoot;
         [SerializeField] private Board _board;
@@ -49,7 +51,9 @@ namespace NikitaKirakosyan.Minesweeper
             _currentGameSettingsIndex++;
             if(_currentGameSettingsIndex >= _gameSettings.Length)
                 _currentGameSettingsIndex = 0;
-
+            
+            Screen.SetResolution(CurrentGameSettings.GameWindowSize.x, CurrentGameSettings.GameWindowSize.y, Screen.fullScreenMode, Screen.currentResolution.refreshRateRatio);
+            _canvasScaler.referenceResolution = CurrentGameSettings.GameWindowSize;
             OnGameSettingsChanged?.Invoke(CurrentGameSettings);
             StartGame();
         }
