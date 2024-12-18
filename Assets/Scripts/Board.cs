@@ -20,13 +20,11 @@ namespace NikitaKirakosyan.Minesweeper
         private void OnEnable()
         {
             Game.OnGameStarted += Setup;
-            Game.OnGameSettingsChanged += Setup;
         }
 
         private void OnDisable()
         {
             Game.OnGameStarted -= Setup;
-            Game.OnGameSettingsChanged -= Setup;
         }
 
 
