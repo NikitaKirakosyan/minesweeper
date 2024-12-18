@@ -12,8 +12,7 @@ namespace NikitaKirakosyan.Minesweeper
         [SerializeField] private BoardHeader _boardHeader;
 
         private List<Cell> _cellInstances;
-
-        private List<Cell> ActiveCells => !_cellInstances.IsNullOrEmpty() ? _cellInstances.Where(cell => cell.IsActive).ToList() : null;
+        
         public int[,] CellsMatrix { get; private set; }
 
 
@@ -37,11 +36,13 @@ namespace NikitaKirakosyan.Minesweeper
 
         public Cell GetCell(Vector2Int matrixPosition)
         {
-            if(!ActiveCells.IsNullOrEmpty())
+            if(!_cellInstances.IsNullOrEmpty())
             {
-                var foundCell = ActiveCells.Find(cell => cell.MatrixPosition == matrixPosition);
-                if(foundCell != null)
-                    return foundCell;
+                foreach(var cellInstance in _cellInstances)
+                {
+                    if(cellInstance.IsActive && cellInstance.MatrixPosition == matrixPosition)
+                        return cellInstance;
+                }
             }
 
             return null;
