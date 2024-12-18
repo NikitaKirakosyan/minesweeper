@@ -37,7 +37,7 @@ namespace NikitaKirakosyan.Minesweeper
         public void SetValue(int value)
         {
             if(value < 0 || value > MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(value), $"Value must be >= 0 and <= {MaxValue}");
+                throw new ArgumentOutOfRangeException(nameof(value), $"Value is {value} but must be >= 0 and <= {MaxValue}");
 
             var valueDigits = GetValueDigits(value, _images.Length);
             for(var i = 0; i < _images.Length; i++)

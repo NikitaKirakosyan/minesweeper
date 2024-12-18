@@ -40,6 +40,7 @@ namespace NikitaKirakosyan.Minesweeper
 
         public void Setup(GameSettingsData gameSettings)
         {
+            _flagsCount = 0;
             SetSize(gameSettings.BoardSize);
             FillGameField(gameSettings);
             _boardHeader.SetBombsCounter(gameSettings.BombsCount);
@@ -159,28 +160,25 @@ namespace NikitaKirakosyan.Minesweeper
                 gameSettings.BombsRandomnicity,
                 gameSettings.BombsRandomnDelta);
 
-            _cellInstances ??= new Dictionary<Vector2Int, Cell>(CellsMatrix.Length);
-
-            var cellIndex = 0;
+            if(!_cellInstances.IsNullOrEmpty())
+            {
+                for(var i = _cellInstances.Count - 1; i >= 0; i--)
+                    Destroy(_cellInstances.ElementAt(i).Value.gameObject);
+            }
+            _cellInstances = new Dictionary<Vector2Int, Cell>(CellsMatrix.Length);
+            
+            
             for(var x = 0; x < CellsMatrix.GetLength(0); x++)
             {
                 for(var y = 0; y < CellsMatrix.GetLength(1); y++)
                 {
                     var hasBomb = CellsMatrix[x, y] == 1;
-                    Cell cell;
-
-                    if(cellIndex < _cellInstances.Count)
-                    {
-                        cell = _cellInstances.ElementAt(cellIndex).Value;
-                    }
-                    else
-                    {
-                        cell = Instantiate(_cellPrefab, _gameFieldGrid);
-                        cell.OnOpened += _boardHeader.LaunchTimer;
-                        cell.OnOpened += OnCellOpened;
-                        cell.OnFlagStateChanged += OnCellFlagStateChanged;
-                        _cellInstances.Add(new Vector2Int(x, y), cell);
-                    }
+                    
+                    var cell = Instantiate(_cellPrefab, _gameFieldGrid);
+                    cell.OnOpened += _boardHeader.LaunchTimer;
+                    cell.OnOpened += OnCellOpened;
+                    cell.OnFlagStateChanged += OnCellFlagStateChanged;
+                    _cellInstances.Add(new Vector2Int(x, y), cell);
 
                     var bombsAround = 0;
                     if(x == 0 && y == 0)
@@ -199,13 +197,8 @@ namespace NikitaKirakosyan.Minesweeper
                     }
 
                     cell.Init(new Vector2Int(x, y), hasBomb, bombsAround);
-                    cellIndex++;
                 }
             }
-
-            var cellsDelta = _cellInstances.Count - 1 - Mathf.Abs(cellIndex - _cellInstances.Count);
-            for(var i = _cellInstances.Count - 1; i > cellsDelta; i--)
-                _cellInstances.ElementAt(i).Value.SetActive(false);
         }
 
         private void OnCellOpened()
