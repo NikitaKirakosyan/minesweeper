@@ -8,6 +8,7 @@ namespace NikitaKirakosyan.Minesweeper
     public class Cell : MonoBehaviour, IPointerClickHandler
     {
         public event Action OnOpened;
+        public event Action<bool> OnFlagStateChanged;
 
         [SerializeField] private Image _image;
         [SerializeField] private Sprite _defaultSprite;
@@ -59,10 +60,11 @@ namespace NikitaKirakosyan.Minesweeper
 
         public void SetFlag(bool value)
         {
-            if(IsOpened)
+            if(IsOpened || HasFlag == value)
                 return;
             
             HasFlag = value;
+            OnFlagStateChanged?.Invoke(HasFlag);
             _image.sprite = HasFlag ? _flagSprite : _defaultSprite;
         }
 

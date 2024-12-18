@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace NikitaKirakosyan.Minesweeper
@@ -12,6 +11,7 @@ namespace NikitaKirakosyan.Minesweeper
         [SerializeField] private BoardHeader _boardHeader;
 
         private List<Cell> _cellInstances;
+        private int _flagsCount;
         
         public int[,] CellsMatrix { get; private set; }
 
@@ -24,6 +24,15 @@ namespace NikitaKirakosyan.Minesweeper
         private void OnDisable()
         {
             Game.OnGameStarted -= Setup;
+        }
+
+        private void OnDestroy()
+        {
+            foreach(var cellInstance in _cellInstances)
+            {
+                cellInstance.OnOpened -= _boardHeader.LaunchTimer;
+                cellInstance.OnFlagStateChanged -= OnCellFlagStateChanged;
+            }
         }
 
 
@@ -80,7 +89,8 @@ namespace NikitaKirakosyan.Minesweeper
                     else
                     {
                         cell = Instantiate(_cellPrefab, _gameFieldGrid);
-                        cell.OnOpened += () => _boardHeader.LaunchTimer();
+                        cell.OnOpened += _boardHeader.LaunchTimer;
+                        cell.OnFlagStateChanged += OnCellFlagStateChanged;
                         _cellInstances.Add(cell);
                     }
 
@@ -92,6 +102,12 @@ namespace NikitaKirakosyan.Minesweeper
             var cellsDelta = _cellInstances.Count - 1 - Mathf.Abs(cellIndex - _cellInstances.Count);
             for(var i = _cellInstances.Count - 1; i > cellsDelta; i--)
                 _cellInstances[i].SetActive(false);
+        }
+
+        private void OnCellFlagStateChanged(bool hasFlag)
+        {
+            _flagsCount += hasFlag ? 1 : -1;
+            _boardHeader.SetBombsCounter(Game.Instance.CurrentGameSettings.BombsCount - _flagsCount);
         }
     }
 }
