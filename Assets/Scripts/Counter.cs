@@ -7,7 +7,7 @@ namespace NikitaKirakosyan.Minesweeper
     public class Counter : MonoBehaviour
     {
         [SerializeField] private Image[] _images;
-        [SerializeField] private NumbersSpriteSheet _numberSpriteSheet;
+        [SerializeField] private NumbersSpriteSheet _counterNumberSpriteSheet;
 
         private int _maxValue;
 
@@ -43,7 +43,7 @@ namespace NikitaKirakosyan.Minesweeper
             for(var i = 0; i < _images.Length; i++)
             {
                 var image = _images[i];
-                image.sprite = _numberSpriteSheet.GetSprite(valueDigits[i]);
+                image.sprite = _counterNumberSpriteSheet.GetSprite(valueDigits[i]);
             }
         }
 

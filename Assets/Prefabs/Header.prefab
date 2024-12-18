@@ -82,7 +82,7 @@ MonoBehaviour:
   - {fileID: 7820588690054578987}
   - {fileID: 6702711888358640137}
   - {fileID: 4590515664975228124}
-  _numberSpriteSheet: {fileID: 11400000, guid: ee66c2a618b608a478e56c41301c80bd, type: 2}
+  _counterNumberSpriteSheet: {fileID: 11400000, guid: ee66c2a618b608a478e56c41301c80bd, type: 2}
 --- !u!1 &98088860776209625
 GameObject:
   m_ObjectHideFlags: 0
@@ -1042,7 +1042,7 @@ MonoBehaviour:
   - {fileID: 1933459202081192160}
   - {fileID: 9185165855263514665}
   - {fileID: 249891462351962070}
-  _numberSpriteSheet: {fileID: 11400000, guid: ee66c2a618b608a478e56c41301c80bd, type: 2}
+  _counterNumberSpriteSheet: {fileID: 11400000, guid: ee66c2a618b608a478e56c41301c80bd, type: 2}
 --- !u!1 &8528449375319254490
 GameObject:
   m_ObjectHideFlags: 0

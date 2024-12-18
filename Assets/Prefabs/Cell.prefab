@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _image: {fileID: 8682692660063689957}
+  _cellNumbersSpriteSheet: {fileID: 11400000, guid: 073457e4ab1b9954e9b515fcd4fa5db5, type: 2}
   _defaultSprite: {fileID: -876170010, guid: aa1263e6b73d86e4a867f16aede30d16, type: 3}
   _openedSprite: {fileID: 1103923212, guid: aa1263e6b73d86e4a867f16aede30d16, type: 3}
   _flagSprite: {fileID: -1264504200, guid: aa1263e6b73d86e4a867f16aede30d16, type: 3}

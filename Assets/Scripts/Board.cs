@@ -63,6 +63,87 @@ namespace NikitaKirakosyan.Minesweeper
             _rectTransform.sizeDelta = newSize;
         }
 
+        private int GetHorizontalBombsAround(Vector2Int originCellMatrixPosition)
+        {
+            var bombsAround = 0;
+            var x = originCellMatrixPosition.x;
+            var y = originCellMatrixPosition.y;
+
+            if(x == 0)
+            {
+                bombsAround += CellsMatrix[x + 1, y] == 1 ? 1 : 0;
+            }
+            else if(x > 0)
+            {
+                bombsAround += CellsMatrix[x - 1, y] == 1 ? 1 : 0;
+                if(x + 1 < CellsMatrix.GetLength(0)) 
+                    bombsAround += CellsMatrix[x + 1, y] == 1 ? 1 : 0;
+            }
+
+            return bombsAround;
+        }
+        
+        private int GetVerticalBombsAround(Vector2Int originCellMatrixPosition)
+        {
+            var bombsAround = 0;
+            var x = originCellMatrixPosition.x;
+            var y = originCellMatrixPosition.y;
+            
+            if(y == 0)
+            {
+                bombsAround += CellsMatrix[x, y + 1] == 1 ? 1 : 0;
+            }
+            else if(y > 0)
+            {
+                bombsAround += CellsMatrix[x, y - 1] == 1 ? 1 : 0;
+                if(y + 1 < CellsMatrix.GetLength(1)) 
+                    bombsAround += CellsMatrix[x, y + 1] == 1 ? 1 : 0;
+            }
+
+            return bombsAround;
+        }
+        
+        private int GetDiagonalBombsAround(Vector2Int originCellMatrixPosition)
+        {
+            var bombsAround = 0;
+            var x = originCellMatrixPosition.x;
+            var y = originCellMatrixPosition.y;
+            
+            if(x > 0 && y == 0)
+            {
+                bombsAround += CellsMatrix[x - 1, y + 1] == 1 ? 1 : 0;
+                if(x + 1 < CellsMatrix.GetLength(0)) 
+                    bombsAround += CellsMatrix[x + 1, y + 1] == 1 ? 1 : 0;
+            }
+            else if(x > 0 && y > 0)
+            {
+                bombsAround += CellsMatrix[x - 1, y - 1] == 1 ? 1 : 0;
+                if(y + 1 < CellsMatrix.GetLength(1)) 
+                    bombsAround += CellsMatrix[x - 1, y + 1] == 1 ? 1 : 0;
+
+                if(x + 1 < CellsMatrix.GetLength(0))
+                {
+                    bombsAround += CellsMatrix[x + 1, y - 1] == 1 ? 1 : 0;
+                    if(y + 1 < CellsMatrix.GetLength(1)) 
+                        bombsAround += CellsMatrix[x + 1, y + 1] == 1 ? 1 : 0;
+                }
+            }
+            else if(x > 0 && y == CellsMatrix.GetLength(1) - 1)
+            {
+                bombsAround += CellsMatrix[x - 1, y - 1] == 1 ? 1 : 0;
+                if(x + 1 < CellsMatrix.GetLength(0)) 
+                    bombsAround += CellsMatrix[x + 1, y - 1] == 1 ? 1 : 0;
+            }
+            else if(x == CellsMatrix.GetLength(0) - 1 && y > 0)
+            {
+                bombsAround += CellsMatrix[x - 1, y - 1] == 1 ? 1 : 0;
+                if(y + 1 < CellsMatrix.GetLength(1)) 
+                    bombsAround += CellsMatrix[x - 1, y + 1] == 1 ? 1 : 0;
+            }
+
+            return bombsAround;
+        }
+        
         private void FillGameField(GameSettingsData gameSettings)
         {
             CellsMatrix = CellsGenerator.Generate(
@@ -94,7 +175,23 @@ namespace NikitaKirakosyan.Minesweeper
                         _cellInstances.Add(cell);
                     }
 
-                    cell.Init(new Vector2Int(x, y), hasBomb);
+                    var bombsAround = 0;
+                    if(x == 0 && y == 0)
+                    {
+                        bombsAround += CellsMatrix[x + 1, y] == 1 ? 1 : 0;
+                        bombsAround += CellsMatrix[x, y + 1] == 1 ? 1 : 0;
+                        bombsAround += CellsMatrix[x + 1, y + 1] == 1 ? 1 : 0;
+                    }
+                    else
+                    {
+                        var cellMatrixPosition = new Vector2Int(x, y);
+                        bombsAround =
+                            GetHorizontalBombsAround(cellMatrixPosition) +
+                            GetVerticalBombsAround(cellMatrixPosition) +
+                            GetDiagonalBombsAround(cellMatrixPosition);
+                    }
+
+                    cell.Init(new Vector2Int(x, y), hasBomb, bombsAround);
                     cellIndex++;
                 }
             }

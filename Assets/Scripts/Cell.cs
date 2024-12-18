@@ -11,19 +11,20 @@ namespace NikitaKirakosyan.Minesweeper
         public event Action<bool> OnFlagStateChanged;
 
         [SerializeField] private Image _image;
+        [SerializeField] private NumbersSpriteSheet _cellNumbersSpriteSheet;
         [SerializeField] private Sprite _defaultSprite;
-        [SerializeField] private Sprite _openedSprite;
         [SerializeField] private Sprite _flagSprite;
         [SerializeField] private Sprite _bombSprite;
         [SerializeField] private Sprite _bombMistakeSprite;
 
         private bool _isInitialized;
+        private int _bombsAround;
 
         public Vector2Int MatrixPosition { get; private set; }
         public bool IsActive { get; private set; }
         public bool HasBomb { get; private set; }
         public bool HasFlag { get; private set; }
-        public bool IsOpened => _image.sprite == _openedSprite || _image.sprite == _bombSprite || _image.sprite == _bombMistakeSprite;
+        public bool IsOpened => _image.sprite != _defaultSprite && _image.sprite != _flagSprite;
 
 
         public override string ToString()
@@ -49,9 +50,10 @@ namespace NikitaKirakosyan.Minesweeper
             }
         }
 
-        public void Init(Vector2Int matrixPosition, bool hasBomb)
+        public void Init(Vector2Int matrixPosition, bool hasBomb, int bombsAround)
         {
             _isInitialized = true;
+            _bombsAround = bombsAround;
             MatrixPosition = matrixPosition;
             HasBomb = hasBomb;
             _image.sprite = _defaultSprite;
@@ -74,9 +76,9 @@ namespace NikitaKirakosyan.Minesweeper
                 return;
 
             if(isAutoOpen)
-                _image.sprite = HasBomb ? _bombSprite : _openedSprite;
+                _image.sprite = HasBomb ? _bombSprite : _cellNumbersSpriteSheet.GetSprite(_bombsAround);
             else
-                _image.sprite = HasBomb ? _bombMistakeSprite : _openedSprite;
+                _image.sprite = HasBomb ? _bombMistakeSprite : _cellNumbersSpriteSheet.GetSprite(_bombsAround);
             
             OnOpened?.Invoke();
         }
