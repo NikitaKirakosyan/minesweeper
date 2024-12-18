@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace NikitaKirakosyan.Minesweeper
@@ -10,7 +11,7 @@ namespace NikitaKirakosyan.Minesweeper
         [SerializeField] private Cell _cellPrefab;
         [SerializeField] private BoardHeader _boardHeader;
 
-        private List<Cell> _cellInstances;
+        private Dictionary<Vector2Int, Cell> _cellInstances;
         private int _flagsCount;
         
         public int[,] CellsMatrix { get; private set; }
@@ -28,10 +29,11 @@ namespace NikitaKirakosyan.Minesweeper
 
         private void OnDestroy()
         {
-            foreach(var cellInstance in _cellInstances)
+            foreach(var (position, cell) in _cellInstances)
             {
-                cellInstance.OnOpened -= _boardHeader.LaunchTimer;
-                cellInstance.OnFlagStateChanged -= OnCellFlagStateChanged;
+                cell.OnOpened -= _boardHeader.LaunchTimer;
+                cell.OnOpened -= OnCellOpened;
+                cell.OnFlagStateChanged -= OnCellFlagStateChanged;
             }
         }
 
@@ -45,14 +47,8 @@ namespace NikitaKirakosyan.Minesweeper
 
         public Cell GetCell(Vector2Int matrixPosition)
         {
-            if(!_cellInstances.IsNullOrEmpty())
-            {
-                foreach(var cellInstance in _cellInstances)
-                {
-                    if(cellInstance.IsActive && cellInstance.MatrixPosition == matrixPosition)
-                        return cellInstance;
-                }
-            }
+            if(!_cellInstances.IsNullOrEmpty() && _cellInstances.TryGetValue(matrixPosition, out var cell))
+                return cell;
 
             return null;
         }
@@ -153,7 +149,7 @@ namespace NikitaKirakosyan.Minesweeper
                 gameSettings.BombsRandomnicity,
                 gameSettings.BombsRandomnDelta);
 
-            _cellInstances ??= new List<Cell>(CellsMatrix.Length);
+            _cellInstances ??= new Dictionary<Vector2Int, Cell>(CellsMatrix.Length);
 
             var cellIndex = 0;
             for(var x = 0; x < CellsMatrix.GetLength(0); x++)
@@ -165,14 +161,15 @@ namespace NikitaKirakosyan.Minesweeper
 
                     if(cellIndex < _cellInstances.Count)
                     {
-                        cell = _cellInstances[cellIndex];
+                        cell = _cellInstances.ElementAt(cellIndex).Value;
                     }
                     else
                     {
                         cell = Instantiate(_cellPrefab, _gameFieldGrid);
                         cell.OnOpened += _boardHeader.LaunchTimer;
+                        cell.OnOpened += OnCellOpened;
                         cell.OnFlagStateChanged += OnCellFlagStateChanged;
-                        _cellInstances.Add(cell);
+                        _cellInstances.Add(new Vector2Int(x, y), cell);
                     }
 
                     var bombsAround = 0;
@@ -198,7 +195,47 @@ namespace NikitaKirakosyan.Minesweeper
 
             var cellsDelta = _cellInstances.Count - 1 - Mathf.Abs(cellIndex - _cellInstances.Count);
             for(var i = _cellInstances.Count - 1; i > cellsDelta; i--)
-                _cellInstances[i].SetActive(false);
+                _cellInstances.ElementAt(i).Value.SetActive(false);
+        }
+
+        private void OnCellOpened()
+        {
+            foreach(var (cellPosition, cellInstance) in _cellInstances)
+            {
+                if(cellInstance.IsActive && !cellInstance.HasBomb && cellInstance.IsOpened && cellInstance.BombsAround == 0)
+                {
+                    if(cellPosition.x == 0 || cellPosition.x < CellsMatrix.GetLength(0) - 1)
+                        GetCell(new Vector2Int(cellPosition.x + 1, cellPosition.y)).Open(true);
+                    if(cellPosition.x - 1 >= 0)
+                        GetCell(new Vector2Int(cellPosition.x - 1, cellPosition.y)).Open(true);
+                    if(cellPosition.y == 0 || cellPosition.y < CellsMatrix.GetLength(1) - 1)
+                        GetCell(new Vector2Int(cellPosition.x, cellPosition.y + 1)).Open(true);
+                    if(cellPosition.y - 1 >= 0)
+                        GetCell(new Vector2Int(cellPosition.x, cellPosition.y - 1)).Open(true);
+
+                    if(cellPosition.y > 0 && cellPosition.y < CellsMatrix.GetLength(1) - 1 && cellPosition.x > 0 && cellPosition.x < CellsMatrix.GetLength(0) - 1)
+                    {
+                        GetCell(new Vector2Int(cellPosition.x - 1, cellPosition.y - 1)).Open(true);
+                        GetCell(new Vector2Int(cellPosition.x + 1, cellPosition.y - 1)).Open(true);
+                        GetCell(new Vector2Int(cellPosition.x - 1, cellPosition.y + 1)).Open(true);
+                        GetCell(new Vector2Int(cellPosition.x + 1, cellPosition.y + 1)).Open(true);
+                    }
+                    else
+                    {
+                        if(cellPosition.x > 0 && cellPosition.x < CellsMatrix.GetLength(0) - 1 && cellPosition.y == 0)
+                        {
+                            GetCell(new Vector2Int(cellPosition.x - 1, cellPosition.y + 1)).Open(true);
+                            GetCell(new Vector2Int(cellPosition.x + 1, cellPosition.y + 1)).Open(true);
+                        }
+
+                        if(cellPosition.y > 0 && cellPosition.y < CellsMatrix.GetLength(1) - 1 && cellPosition.x == 0)
+                        {
+                            GetCell(new Vector2Int(cellPosition.x + 1, cellPosition.y - 1)).Open(true);
+                            GetCell(new Vector2Int(cellPosition.x + 1, cellPosition.y + 1)).Open(true);
+                        }
+                    }
+                }
+            }
         }
 
         private void OnCellFlagStateChanged(bool hasFlag)

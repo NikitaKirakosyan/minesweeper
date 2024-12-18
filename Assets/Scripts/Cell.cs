@@ -18,10 +18,10 @@ namespace NikitaKirakosyan.Minesweeper
         [SerializeField] private Sprite _bombMistakeSprite;
 
         private bool _isInitialized;
-        private int _bombsAround;
 
         public Vector2Int MatrixPosition { get; private set; }
         public bool IsActive { get; private set; }
+        public int BombsAround { get; private set; }
         public bool HasBomb { get; private set; }
         public bool HasFlag { get; private set; }
         public bool IsOpened => _image.sprite != _defaultSprite && _image.sprite != _flagSprite;
@@ -53,7 +53,7 @@ namespace NikitaKirakosyan.Minesweeper
         public void Init(Vector2Int matrixPosition, bool hasBomb, int bombsAround)
         {
             _isInitialized = true;
-            _bombsAround = bombsAround;
+            BombsAround = bombsAround;
             MatrixPosition = matrixPosition;
             HasBomb = hasBomb;
             _image.sprite = _defaultSprite;
@@ -76,9 +76,9 @@ namespace NikitaKirakosyan.Minesweeper
                 return;
 
             if(isAutoOpen)
-                _image.sprite = HasBomb ? _bombSprite : _cellNumbersSpriteSheet.GetSprite(_bombsAround);
+                _image.sprite = HasBomb ? _bombSprite : _cellNumbersSpriteSheet.GetSprite(BombsAround);
             else
-                _image.sprite = HasBomb ? _bombMistakeSprite : _cellNumbersSpriteSheet.GetSprite(_bombsAround);
+                _image.sprite = HasBomb ? _bombMistakeSprite : _cellNumbersSpriteSheet.GetSprite(BombsAround);
             
             OnOpened?.Invoke();
         }
