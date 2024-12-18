@@ -40,6 +40,7 @@ namespace NikitaKirakosyan.Minesweeper
 
         public void Setup(GameSettingsData gameSettings)
         {
+            _boardHeader.StopTimer();
             _flagsCount = 0;
             SetSize(gameSettings.BoardSize);
             FillGameField(gameSettings);
