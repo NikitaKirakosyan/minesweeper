@@ -52,7 +52,7 @@ namespace NikitaKirakosyan.Minesweeper
             if(_currentGameSettingsIndex >= _gameSettings.Length)
                 _currentGameSettingsIndex = 0;
             
-            Screen.SetResolution(CurrentGameSettings.GameWindowSize.x, CurrentGameSettings.GameWindowSize.y, Screen.fullScreenMode, Screen.currentResolution.refreshRateRatio);
+            Screen.SetResolution(CurrentGameSettings.GameWindowSize.x, CurrentGameSettings.GameWindowSize.y, FullScreenMode.Windowed, 60);
             _canvasScaler.referenceResolution = CurrentGameSettings.GameWindowSize;
             OnGameSettingsChanged?.Invoke(CurrentGameSettings);
             StartGame();
